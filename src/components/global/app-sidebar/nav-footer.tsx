@@ -9,13 +9,14 @@ const NavFooter = ({ prismaUser }: { prismaUser: User }) => {
     const { isLoaded, isSignedIn, user } = useUser()
 
     const [loading, setLoading] = React.useState(false)
+   
     const router = useRouter()
     if (!isLoaded || !isSignedIn) return null
 
     return (
         <SidebarMenu>
             <SidebarMenuItem>
-                <div className='flex flex-col gap-y-6 items-start group-data-[collapsible=icon:hidden]'>
+            <div className="flex flex-col gap-y-6 items-start group-data-[collapsible=icon]:hidden">
                     {
                         !prismaUser.subscription && (
                             <div className='flex flex-col items-start p-2 pb-3 gap-4 bg-background-80 rounded-xl'>

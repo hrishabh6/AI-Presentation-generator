@@ -18,7 +18,7 @@ const AppSideBar = ({recentProjects, user, ...props}:
 {recentProjects: Project[]} & {user : User} & React.ComponentProps<typeof Sidebar> ) => {
   return (
     <Sidebar collapsible='icon' {...props} className='max-w-[212px] bg-background-90'>
-      <SidebarHeader className='pt-6 px-3 pb-0'>
+      <SidebarHeader className='pt-6 px-2 pb-0'>
         <SidebarMenuButton size={'lg'} className='data-[state=open]:text-sidebar-accent-foreground' >
           <div className='flex aspect-square size-8 items-center justify-center rounded-lg text-sidebar-primary-foreground'>
             <Avatar className='h-10 w-10 rounded-full' >
@@ -29,7 +29,7 @@ const AppSideBar = ({recentProjects, user, ...props}:
           <span className='truncate text-primary text-3xl font-semibold'>Horizon</span>
         </SidebarMenuButton>
       </SidebarHeader>
-      <SidebarContent className='px-3 mt-10 gap-y-6'>
+      <SidebarContent className='px-2 mt-10 gap-y-6'>
         <NavMain items={data.navMain}/>
         <RecentOpen recentProjects={recentProjects}/>
       </SidebarContent>

@@ -27,7 +27,7 @@ model User {
   storeId String?
   webhooksSecret String?
 
-  Projects Project[] @relation("OwnedProjects")
+  Projects Project[] @relation("OwnedProjects") 
   PurchasedProjects Project[] @relation("PurchasedProjects")
 
 
