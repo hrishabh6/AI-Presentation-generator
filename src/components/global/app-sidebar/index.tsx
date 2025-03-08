@@ -5,7 +5,6 @@ import React from 'react'
 import {
   SidebarContent,
   SidebarFooter,
-  SidebarGroup,
   SidebarHeader,
 } from "@/components/ui/sidebar"
 import { Avatar, AvatarImage } from '@/components/ui/avatar'
@@ -13,6 +12,7 @@ import { AvatarFallback } from '@radix-ui/react-avatar'
 import NavMain from './nav-main'
 import { data } from '@/lib/constants'
 import RecentOpen from './recent-open'
+import NavFooter from './nav-footer'
 
 const AppSideBar = ({recentProjects, user, ...props}: 
 {recentProjects: Project[]} & {user : User} & React.ComponentProps<typeof Sidebar> ) => {
@@ -33,7 +33,9 @@ const AppSideBar = ({recentProjects, user, ...props}:
         <NavMain items={data.navMain}/>
         <RecentOpen recentProjects={recentProjects}/>
       </SidebarContent>
-      <SidebarFooter />
+      <SidebarFooter>
+        <NavFooter prismaUser={user}/>
+      </SidebarFooter>
     </Sidebar>
   )
 }
