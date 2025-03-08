@@ -1,10 +1,12 @@
 "use client"
+//uncomment the necessary lines to get the thumbnail preview running
 import React from 'react'
 import { motion } from "framer-motion";
-import { itemVariants, themes } from '@/lib/constants';
+import { itemVariants } from '@/lib/constants';
+// import { themes } from '@/lib/constants';
 import { useSlideStore } from '@/store/useSlideStore';
 import { useRouter } from 'next/navigation';
-import ThumbnailPreview from './thumbnail-preview';
+// import ThumbnailPreview from './thumbnail-preview';
 import { JsonValue } from '@prisma/client/runtime/library';
 import { timeAgo } from '@/lib/utils';
 import AlertDialogBox from '../alert-dialog';
@@ -28,7 +30,7 @@ const ProjectCard = ({
   createdAt,
   isDelete,
   slideData,
-  themeName,
+  // themeName,
 }: ProjectCardProps) => {
 
   const { setSlides } = useSlideStore()
@@ -111,7 +113,7 @@ const ProjectCard = ({
   }
 
 
-  const theme = themes.find((theme) => theme.name === themeName) || themes[0]
+  // const theme = themes.find((theme) => theme.name === themeName) || themes[0]
   const [loading, setLoading] = React.useState(false)
   const [open, setOpen] = React.useState(false)
   return (
@@ -124,10 +126,10 @@ const ProjectCard = ({
         className="relative aspect-[16/10] overflow-hidden rounded-lg cursor-pointer"
         onClick={handleNavigation}
       >
-        <ThumbnailPreview theme={theme}
+        {/* <ThumbnailPreview theme={theme}
         //add the slide dat
         //  slide={JSON.parse(JSON.stringify(slideData))?.[0]}
-        />
+        /> */}
       </div>
       <div className='w-full'>
         <div className='space-y-1'>

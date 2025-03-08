@@ -3,9 +3,7 @@ import { Switch } from '@/components/ui/switch'
 import { useTheme } from 'next-themes'
 import React from 'react'
 
-type Props = {}
-
-const ThemeSwitcher = (props: Props) => {
+const ThemeSwitcher = () => {
     const [mounted, setMounted] = React.useState(false)
     const{theme, setTheme} = useTheme()
 
