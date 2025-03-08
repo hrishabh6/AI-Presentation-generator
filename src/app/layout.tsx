@@ -18,7 +18,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "NewHorizon AI PPT Builder",
+  title: "Horizon AI PPT Builder",
   description: "Build your AI PPT with ease",
 };
 
