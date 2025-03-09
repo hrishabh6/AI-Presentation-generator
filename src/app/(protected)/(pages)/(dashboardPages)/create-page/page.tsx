@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react'
-import CreatePageSkeleton from './_components/CreatePage/CreatePage'
+import CreatePageSkeleton from './_components/CreatePage/CreatePageSkeleton'
 import RenderPage from './_components/RenderPage'
 
 type Props = {}
