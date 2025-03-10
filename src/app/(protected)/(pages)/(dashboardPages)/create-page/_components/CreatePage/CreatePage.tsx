@@ -12,9 +12,6 @@ type Props = {
 const CreatePage = ({ onSelectOption }: Props) => {
     const {prompts, setPage} = usePromptStore()
 
-    useEffect(() => {        
-        setPage("create")
-    },[])
     
 
     return (
