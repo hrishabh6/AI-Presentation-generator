@@ -8,10 +8,11 @@ import { ChevronLeft, Loader2, RotateCcw } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import useCreativeAiStore from '@/store/useCreativeAiStore'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import CardList from '../../Common/CardList'
+import CardList from '../Common/CardList'
 import usePromptStore from '@/store/usePromptStore'
 import RecentPrompts from './RecentPrompts'
 import { toast } from 'sonner'
+import { generateCreativePrompt } from '@/actions/openAi'
 type Props = {
     onBack : () => void
 }
@@ -45,6 +46,8 @@ const CreativeAI = ({onBack}: Props) => {
             return
         }
         setIsGenerating(true)
+        const res = await generateCreativePrompt(currentAiPrompt)
+        //WIP : use open AI and make api call
     }
 
     const handleGenerate = () => {}

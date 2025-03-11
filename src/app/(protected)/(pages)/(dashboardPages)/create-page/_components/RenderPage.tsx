@@ -4,7 +4,8 @@ import {motion, AnimatePresence} from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import React from 'react'
 import CreatePage from './CreatePage/CreatePage'
-import CreativeAI from './CreatePage/GenerateAI/CreativeAI'
+import CreativeAI from './GenerateAI/CreativeAI'
+import ScratchPage from './Scratch/ScratchPage'
 
 
 const RenderPage = () => {
@@ -32,7 +33,7 @@ const RenderPage = () => {
             case "creative-ai":
                 return <CreativeAI onBack={handleBack}></CreativeAI>
             case "create-scratch":
-                return <></>
+                return <ScratchPage onBack={handleBack}></ScratchPage>
             default:
                 return null
         }

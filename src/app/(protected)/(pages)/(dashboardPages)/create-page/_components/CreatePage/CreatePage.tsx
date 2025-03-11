@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { containerVariants, CreatePageCard, itemVariants } from '@/lib/constants'
 import { Button } from '@/components/ui/button'
-import RecentPrompts from './GenerateAI/RecentPrompts'
+import RecentPrompts from '../GenerateAI/RecentPrompts'
 import usePromptStore from '@/store/usePromptStore'
 type Props = {
     onSelectOption: (option: string) => void
