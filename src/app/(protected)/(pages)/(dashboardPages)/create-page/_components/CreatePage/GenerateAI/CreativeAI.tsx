@@ -9,6 +9,9 @@ import { Input } from '@/components/ui/input'
 import useCreativeAiStore from '@/store/useCreativeAiStore'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import CardList from '../../Common/CardList'
+import usePromptStore from '@/store/usePromptStore'
+import RecentPrompts from './RecentPrompts'
+import { toast } from 'sonner'
 type Props = {
     onBack : () => void
 }
@@ -21,6 +24,7 @@ const CreativeAI = ({onBack}: Props) => {
     const [editText, setEditText] = React.useState<string | null>(null)
     const [noOfCards, setNoOfCards] = React.useState(0)
     const {currentAiPrompt,  setCurrentAiPrompt, outlines, resetOutlines, addOutline, addMultipleOutlines} = useCreativeAiStore()
+    const {prompts, addPrompt} = usePromptStore()
     const handleBack = () => {
         onBack()
     }   
@@ -33,10 +37,17 @@ const CreativeAI = ({onBack}: Props) => {
         resetOutlines()
     }   
 
-    // const generateOutline = () => {
+    const generateOutline = async () => {
+        if(currentAiPrompt.trim() === "") {
+            toast.error("Error", {
+                description: "Please enter a prompt to generate the outline"
+            })
+            return
+        }
+        setIsGenerating(true)
+    }
 
-    // }
-
+    const handleGenerate = () => {}
 
 
   return (
@@ -122,7 +133,7 @@ const CreativeAI = ({onBack}: Props) => {
         <div className='flex w-full justify-center items-center'>
             <Button
                 className="font-medium text-lg flex gap-2 items-center"
-                // onClick={generateOutline}
+                onClick={generateOutline}
                 disabled={isGenerating}
             >
                 {isGenerating ? (
@@ -155,7 +166,28 @@ const CreativeAI = ({onBack}: Props) => {
                 setEditText(title)
             }}
         />
+        {
+            outlines.length > 0 && 
+            <Button
+                className='w-full'
+                onClick={handleGenerate}
+                disabled={isGenerating}
+            >   
+                {isGenerating ? (
+                    <>
+                    <Loader2 className='animate-spin mr-2'/>
+                    Generating... 
+                    
+                    </>
+                )
+                 :
 
+                 "Generate PPT"}
+            </Button>
+        }
+        {prompts.length > 0 && 
+            <RecentPrompts/>
+        } 
     </motion.div>
   )
 }
