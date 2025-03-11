@@ -31,12 +31,11 @@ const CardList = ({
     setEditText,
     setEditingCard,
     setSelectedCard,
-    // addOutline,
 }: Props) => {
-
     const [dragItem, setDragItem] = React.useState<OutlineCard | null>(null)
     const [draggedOverIndex, setDraggedOverIndex] = React.useState<number | null>(null)
     const dragOffSetY = React.useRef<number>(0)
+    
     const onDragOver = (e: React.DragEvent, index: number) => {
         e.preventDefault()
         if (!dragItem) return
@@ -45,13 +44,12 @@ const CardList = ({
         const y = e.clientY - rect.top
         const threshold = rect.height / 2
 
+        // This determines whether to place before or after the current card
         if (y > threshold) {
-            setDraggedOverIndex(index)
+            setDraggedOverIndex(index + 1) // After this card
         } else {
-            setDraggedOverIndex(index + 1)
-
+            setDraggedOverIndex(index) // Before this card
         }
-
     }
 
     const onDrop = (e: React.DragEvent) => {
@@ -63,15 +61,23 @@ const CardList = ({
             (card) => card.id === dragItem.id
         )
 
-        if (draggedIndex === -1 || draggedIndex === draggedOverIndex) return
+        // Don't do anything if dropping at the same position
+        if (draggedIndex === -1 || draggedIndex === draggedOverIndex || 
+            (draggedIndex + 1 === draggedOverIndex && draggedIndex === outlines.length - 1)) return
 
-        const [removeCard] = updatedCards.splice(draggedIndex, 1)
-        updatedCards.splice(draggedOverIndex > draggedIndex ? draggedOverIndex - 1 : draggedOverIndex, 0, removeCard)
+        // Remove the dragged card
+        const [removedCard] = updatedCards.splice(draggedIndex, 1)
+        
+        // Adjust the insertion index if needed
+        const adjustedIndex = draggedIndex < draggedOverIndex ? draggedOverIndex - 1 : draggedOverIndex
+        
+        // Insert the card at the new position
+        updatedCards.splice(adjustedIndex, 0, removedCard)
 
+        // Update all cards with their new order
         addMultipleOutlines(updatedCards.map((card, index) => ({ ...card, order: index + 1 })))
         setDragItem(null)
         setDraggedOverIndex(null)
-
     }
 
     const onCardUpdate = (id: string, newTitle: string) => {
@@ -99,13 +105,11 @@ const CardList = ({
         draggedElement.style.opacity = `0.8`
         draggedElement.style.width = `${(e.currentTarget as HTMLElement).offsetWidth}px`
         document.body.appendChild(draggedElement)
-        e.dataTransfer.setDragImage(draggedElement, 0 , dragOffSetY.current)
+        e.dataTransfer.setDragImage(draggedElement, 0, dragOffSetY.current)
 
         setTimeout(() => {
-            setDraggedOverIndex(outlines.findIndex((c) => c.id === card.id))
             document.body.removeChild(draggedElement)
         }, 0)
-
     }
 
     const onDragEnd = () => {
@@ -116,21 +120,48 @@ const CardList = ({
     const getDragOverStyles = (cardIndex: number) => {
         if (draggedOverIndex === null || dragItem === null) return {}
 
+        const currentCardId = outlines[cardIndex]?.id
+        
+        // Don't show indicators when hovering over the dragged card itself
+        if (dragItem.id === currentCardId) return {}
+        
         if (draggedOverIndex === cardIndex) {
             return {
-                borderTop : "2px solid #000",
-                marginTop : "0.5rem",
-                transition : "margin 0.2s cubic-bezier(0.25,0.1,0.25,1)"
+                borderTop: "2px solid #000",
+                marginTop: "0.5rem",
+                transition: "margin 0.2s cubic-bezier(0.25,0.1,0.25,1)"
             }
-        } else if (cardIndex === draggedOverIndex - 1 ) {
+        } else if (cardIndex === draggedOverIndex - 1) {
             return {
-                borderBottom : "2px solid #000",
-                marginBottom : "0.5rem",
-                transition : "margin 0.2s cubic-bezier(0.25,0.1,0.25,1)"
+                borderBottom: "2px solid #000",
+                marginBottom: "0.5rem",
+                transition: "margin 0.2s cubic-bezier(0.25,0.1,0.25,1)"
             }
         }
 
         return {}
+    }
+    
+    const onAddCard = (index?: number) => {
+        const newCardIndex = index !== undefined ? index + 1 : outlines.length;
+        const newCard: OutlineCard = {
+            id: Math.random().toString(36).substring(2,9),
+            title: editText || "New Section",
+            order: newCardIndex + 1,
+        };
+        
+        const updatedCards = [...outlines];
+        // Insert the new card at the specified position
+        updatedCards.splice(newCardIndex, 0, newCard);
+        
+        // Reorder all cards correctly
+        const reorderedCards = updatedCards.map((card, idx) => ({
+            ...card,
+            order: idx + 1
+        }));
+        
+        addMultipleOutlines(reorderedCards);
+        setEditText('');
     }
 
     return (
@@ -172,7 +203,7 @@ const CardList = ({
                             dragOverStyles={getDragOverStyles(index)}
                         />
                         <AddCardButton
-                            // onAddCard={() => onAddCard(index)}
+                            onAddCard={() => onAddCard(index)}
                         />
                     </React.Fragment>
                 ))}

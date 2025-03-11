@@ -80,13 +80,17 @@ const ScratchPage = ({
   const handleAddCard = () => {
     const newCard : OutlineCard = {
       id: uuidv4(),
-      title : editText || "New Section",
-      order : outlines.length + 1
+      title: editText || "New Section",
+      order: outlines.length + 1
     }
-    setEditText("")
-    addOutline(newCard)
+    
+    // Create a new array with all existing cards plus the new one
+    const updatedCards = [...outlines, newCard];
+    
+    // Use addMultipleOutlines to ensure consistent ordering
+    addMultipleOutlines(updatedCards);
+    setEditText("");
   }
-
   return (
     <motion.div
       className="space-y-6 w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8"
