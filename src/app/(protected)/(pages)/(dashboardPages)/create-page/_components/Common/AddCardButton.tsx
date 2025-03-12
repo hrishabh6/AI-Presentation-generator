@@ -39,12 +39,13 @@ const AddCardButton = ({
                             onClick={onAddCard}
                             aria-label="Add new card"
                         >
-                            <Plus className="h-4 w-4 text-black" />
+                            <Plus className="h-4 w-4 dark:text-black text-white" />
                         </Button>
                         <div className="w-[40%] h-[1px] bg-primary" />
                     </motion.div>
                 )}
             </AnimatePresence>
+                
         </motion.div>
     )
 }
