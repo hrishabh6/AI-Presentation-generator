@@ -157,12 +157,16 @@ export const getProjectById = async (projectId: string) => {
       return { status: 403, error: "User not authenticated" };
     }
 
-    const project = await client.project.findUnique({
+    const project = await client.project.findFirst({
       where: {
         id: projectId
       }
     })
 
+    if(!project) {
+      return { status: 404, error: "Project not found" };
+    }
+    return { status: 200, data: project };
 
   } catch (error) {
     console.log("❌ Error in getProjectById", error);
