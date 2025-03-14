@@ -1,6 +1,7 @@
 import { getAllProjects } from '@/actions/project'
 import NotFound from '@/components/global/not-found'
 import Projects from '@/components/global/projects'
+
 import React from 'react'
 
 
@@ -24,4 +25,4 @@ const page = async () => {
   )
 }
 
-export default page
+export default page 

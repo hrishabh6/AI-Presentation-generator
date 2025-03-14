@@ -1,8 +1,10 @@
+"use client"
 import { Project } from '@prisma/client'
 import React from 'react'
 import {motion} from "framer-motion"
 import { containerVariants } from '@/lib/constants'
 import ProjectCard from '../project-card'
+
 type Props = {
     projects : Project[]
 }

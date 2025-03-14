@@ -9,10 +9,11 @@ import { useRouter } from 'next/navigation';
 // import ThumbnailPreview from './thumbnail-preview';
 import { JsonValue } from '@prisma/client/runtime/library';
 import { timeAgo } from '@/lib/utils';
-import AlertDialogBox from '../alert-dialog';
+
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { deleteProject, recoverProject } from '@/actions/project';
+import AlertDialogBox from '@/components/global/alert-dialog';
 
 interface ProjectCardProps {
   projectId: string;
@@ -32,7 +33,8 @@ const ProjectCard = ({
   slideData,
   // themeName,
 }: ProjectCardProps) => {
-
+  const [loading, setLoading] = React.useState(false)
+  const [open, setOpen] = React.useState(false)
   const { setSlides } = useSlideStore()
   const router = useRouter()
 
@@ -114,8 +116,7 @@ const ProjectCard = ({
 
 
   // const theme = themes.find((theme) => theme.name === themeName) || themes[0]
-  const [loading, setLoading] = React.useState(false)
-  const [open, setOpen] = React.useState(false)
+  
   return (
     <motion.div
       className={`group w-full flex flex-col gap-y-3 rounded-xl p-3 transition-colors ${!isDelete && "hover:bg-muted/50"
