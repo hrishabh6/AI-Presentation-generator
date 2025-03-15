@@ -3,7 +3,7 @@ import React from 'react'
 
 const Signin = () => {
   return (
-    <SignIn/>
+    <SignIn forceRedirectUrl={'/dashboard'}/>
   )
 }
 

@@ -7,7 +7,8 @@ import { useTheme } from 'next-themes'
 import { redirect, useParams } from 'next/navigation'
 import React, { useEffect } from 'react'
 import { toast } from 'sonner'
-import {DndProvider} from 'react-dnd'
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
 
 type Props = {}
 
@@ -57,8 +58,8 @@ const Page = (props: Props) => {
   }
 
   return (
-    <DndProvider>
-        
+    <DndProvider backend={HTML5Backend}>
+      
     </DndProvider>
   )
 }

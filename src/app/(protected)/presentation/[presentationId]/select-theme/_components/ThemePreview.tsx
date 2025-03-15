@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { ArrowLeft } from 'lucide-react'
 import ThemeCard from './ThemeCard'
 import ThemePicker from './ThemePicker'
+import { themes } from '@/lib/constants'
 
 
 const ThemePreview = () => {
@@ -26,6 +27,11 @@ const ThemePreview = () => {
     useEffect(() => {
       controls.start("visible")
     }, [controls, selectedTheme])
+
+    const applyTheme = (theme : Theme) => {
+      setSelectedTheme(theme)
+      setCurrentTheme(theme)
+    }
 
   const leftCardContent = (
     <div className='space-y-4'>
@@ -190,7 +196,12 @@ const ThemePreview = () => {
         </div>
       </div>
       
-      <ThemePicker/>
+      <ThemePicker
+        selectedTheme={selectedTheme}
+        themes={themes}
+        onThemeSelect={applyTheme}
+          
+      />
 
     </div>
   )
