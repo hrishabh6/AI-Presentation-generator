@@ -24,6 +24,7 @@ const ThemePreview = () => {
       }
     }, [project])
 
+    
     useEffect(() => {
       controls.start("visible")
     }, [controls, selectedTheme])
