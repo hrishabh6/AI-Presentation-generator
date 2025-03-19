@@ -1,6 +1,9 @@
 import { onAuthenticateUser } from "@/actions/user";
 import { redirect } from "next/navigation";
 
+export const dynamic = "force-dynamic";
+
+
 const AuthCallback = async () => {
   const auth = await onAuthenticateUser();
 
@@ -11,8 +14,10 @@ const AuthCallback = async () => {
     auth.status === 400 ||
     auth.status === 500
   ) {
-    redirect("sign-in");
+    redirect("/sign-in");
   }
+
+  return null; // Return null since the redirect happens anyway
 };
 
 export default AuthCallback;

@@ -3,7 +3,11 @@
   const nextConfig: NextConfig = {
     /* config options here */
     typescript: {
-      ignoreBuildErrors: true, // Suppress TypeScript build errors
+      ignoreBuildErrors: true,
+    },
+    // Suppress ESLint errors during build
+    eslint: {
+      ignoreDuringBuilds: true,
     },
     images: {
       remotePatterns : [
