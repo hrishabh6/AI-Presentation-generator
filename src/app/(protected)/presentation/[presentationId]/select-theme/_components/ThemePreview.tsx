@@ -151,7 +151,7 @@ const ThemePreview = () => {
       }}
     >
       <div className=" flex-grow overflow-y-auto">
-        <div className="p-12 flex flex-col items-center min-h-screen">
+        <div className="p-12 overflow-hidden flex flex-col items-center min-h-screen">
           <Button
             variant={"outline"}
             className="mb-12 self-start"

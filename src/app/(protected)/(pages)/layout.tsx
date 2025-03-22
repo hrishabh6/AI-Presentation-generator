@@ -13,8 +13,9 @@ type Props = {
 const layout = async ({ children }: Props) => {
     const recentProjects = await getRecentProjects()
     const checkUser = await onAuthenticateUser()
-
+    
     if (!checkUser.user) {
+        console.log("logging from layout")
         redirect('/sign-in')
     }
 
