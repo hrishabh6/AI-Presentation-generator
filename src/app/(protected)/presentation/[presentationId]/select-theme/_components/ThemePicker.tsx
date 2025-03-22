@@ -22,7 +22,7 @@ const ThemePicker = ({
   themes
 }: Props) => {
   const router = useRouter()
-  const { project, setSlide, currentTheme } = useSlideStore()
+  const { project, setSlides, currentTheme } = useSlideStore()
   const [Loading, setLoading] = React.useState(false)
   const params = useParams()
 
@@ -43,7 +43,9 @@ const ThemePicker = ({
     try {
       const res = await generateLayoutsFromGemini(params.presentationId as string, currentTheme.name)
 
-      if (res.status !== 200 && !res?.data) {
+      if (res.status !== 200 || !res?.data) {
+        console.log(res)
+        console.log("Throwing New Error")        
         throw new Error("Error generating layouts")
       }
 
@@ -51,7 +53,7 @@ const ThemePicker = ({
         description: "Layouts generated successfully"
       })
       router.push(`/presentation/${project?.id}`)
-      setSlide(res.data)
+      setSlides(res.data)
     } catch (error) {
       toast.error("Error", {
         description: "Failed to generate layouts"

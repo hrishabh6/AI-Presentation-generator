@@ -10,9 +10,8 @@ import { toast } from 'sonner'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 
-type Props = {}
 
-const Page = (props: Props) => {
+const Page = () => {
   //WIp :Create presentation view
   const [isLoadijng, setIsLoading] = React.useState(true)
     const {setSlides, setProject, currentTheme, setCurrentTheme} = useSlideStore()
@@ -59,7 +58,9 @@ const Page = (props: Props) => {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      
+      <div>
+        
+      </div>
     </DndProvider>
   )
 }
