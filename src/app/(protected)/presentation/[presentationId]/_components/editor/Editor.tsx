@@ -1,3 +1,4 @@
+"use client"
 import { Skeleton } from '@/components/ui/skeleton';
 import { LayoutSlides, Slide } from '@/lib/types';
 import { cn } from '@/lib/utils';
@@ -7,7 +8,11 @@ import { isDragging } from 'motion-dom';
 import React, { useEffect, useRef, useState } from 'react'
 import { useDrag, useDrop } from 'react-dnd';
 import { v4 } from 'uuid';
-import MasterRecursiveComponent from './MasterRecursiveComponent';
+import { MasterRecursiveComponent } from './MasterRecursiveComponent';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Button } from '@/components/ui/button';
+import { EllipsisVertical, Trash2 } from 'lucide-react';
+
 
 interface DropZoneProps {
   index: number;
@@ -84,38 +89,69 @@ const DraggableSlides: React.FC<DraggableSlidesProps> = ({
   moveSlide,
   slide,
 }) => {
-    const ref = useRef(null)
-    const {currentSlide, currentTheme, setCurrentSlide, updateContentItem} = useSlideStore()
+  const ref = useRef(null)
+  const { currentSlide, currentTheme, setCurrentSlide, updateContentItem } = useSlideStore()
 
-    const [{isDragging}, drag] = useDrag({
-      type : 'SLIDE',
-      item : {  index , type : 'SLIDE' },
-      collect : (monitor) => ({
-        isDragging : monitor.isDragging(),
-        canDrag : isEditable
-      })
-
+  const [{ isDragging }, drag] = useDrag({
+    type: 'SLIDE',
+    item: { index, type: 'SLIDE' },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+      canDrag: isEditable
     })
 
-    return (
-      <div
-        ref={ref}
-        className={cn(
-          "w-full rounded-lg shadow-lg relative p-0 min-h-[400px] max-h-[800px]",
-          "shadow-xl transition-shadow duration-300",
-          "flex flex-col",
-          index == currentSlide ? "ring-2 ring-blue-500 ring-offset-2" : "",
-          slide.className,
-          isDragging ? "opacity-50" : "opacity-100"
-        )}
-        style={{ backgroundImage: currentTheme.gradientBackground }}
-        onClick={() => setCurrentSlide(index)}
-      >
-        <div className="h-full w-full flex-grow overflow-hidden">
-          <MasterRecursiveComponent/>
-        </div>
+  })
+
+  const handleContentChange = (contentId: string, newContent: string | string[] | string[][]) => {
+    console.log('Content Changed', slide, contentId, newContent)
+    if (isEditable) {
+      updateContentItem(slide.id, contentId, newContent)
+    }
+  }
+
+  return (
+    <div
+      ref={ref}
+      className={cn(
+        "w-full rounded-lg shadow-lg relative p-0 min-h-[400px] max-h-[800px] py-10",
+        "shadow-xl transition-shadow duration-300",
+        "flex flex-col",
+        index == currentSlide ? "ring-2 ring-blue-500 ring-offset-2" : "",
+        slide.className,
+        isDragging ? "opacity-50" : "opacity-100"
+      )}
+      style={{ backgroundImage: currentTheme.gradientBackground }}
+      onClick={() => setCurrentSlide(index)}
+    >
+      <div className="h-full w-full flex-grow overflow-hidden">
+        <MasterRecursiveComponent
+          content={slide.content}
+          slideId={slide.id}
+          onContentChange={handleContentChange}
+          isEditable={isEditable}
+          isPreview={false}
+        />
       </div>
-    )
+      {isEditable && (
+        <Popover>
+          <PopoverTrigger asChild className="absolute top-2 right-2">
+            <Button variant={"outline"} size={"sm"}>
+              <EllipsisVertical className="w-5 h-5" />
+              <span className="sr-only">Slide options</span>
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-fit p=-0">
+            <div className="flex space-x-2">
+              <Button variant={"ghost"} onClick={() => handleDelete(slide.id)}>
+                <Trash2 className="w-5 h-5 text-red-500" />
+                <span className="sr-only">Delete slide</span>
+              </Button>
+            </div>
+          </PopoverContent>
+        </Popover>
+      )}
+    </div>
+  )
 }
 
 
@@ -141,15 +177,12 @@ export const Editor = ({ isEditable }: Props) => {
     reorderSlides(dragIndex, HoverIndex);
   }
 
-  useEffect(() => {
-    if (slideRefs.current[currentSlide]) {
-      slideRefs.current[currentSlide].scrollIntoView({
-        behavior: 'smooth',
-        block: 'center',
-        inline: 'center'
-      })
+  const handleDelete = (id: string) => {
+    if (isEditable) {
+      console.log('Deleting', id)
     }
-  }, [currentSlide])
+    removeSlide(id)
+  }
 
   const handleDrop = (
     item: {
@@ -174,6 +207,23 @@ export const Editor = ({ isEditable }: Props) => {
       moveSlide(item.index, dropIndex);
     }
   };
+
+  useEffect(() => {
+    if (slideRefs.current[currentSlide]) {
+      slideRefs.current[currentSlide].scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+        inline: 'center'
+      })
+    }
+  }, [currentSlide])
+
+  useEffect(() => {
+    if(typeof window !== 'undefined') {
+      isLoading(false)
+    }
+  }, [])
+
   return (
     <div className="flex-1 flex flex-col h-full max-w-3xl mx-auto px-4 mb-20">
       {loading ? (
@@ -184,22 +234,31 @@ export const Editor = ({ isEditable }: Props) => {
         </div>
       ) : (
         <ScrollArea className='flex mt-8'>
-         <div className='px-4 pb-4 space-y-4 pt-2'>
-         {
-            isEditable && <DropZone
-              index={0}
-              isEditable={isEditable}
-              onDrop={handleDrop}
-            />
-          }
+          <div className='px-4 pb-4 w-full flex flex-col gap-4 pt-2 ml-4'>
+            {
+              isEditable &&
+               <DropZone
+                index={0}
+                isEditable={isEditable}
+                onDrop={handleDrop}
+              />
+            }
             {orderedSlide.map((slide, index) => (
               <React.Fragment
                 key={slide.id || index}
-              > 
-                <DraggableSlide/>
+              >
+                <DraggableSlides
+                  slide={slide}
+                  index={index}
+                  moveSlide={moveSlide}
+                  handleDelete={handleDelete}
+                  isEditable={isEditable}
+
+                />
+                
               </React.Fragment>
             ))}
-         </div>
+          </div>
         </ScrollArea>
       )}
     </div>
