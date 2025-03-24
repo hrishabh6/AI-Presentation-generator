@@ -10,7 +10,7 @@ import Table from '@/components/global/editor/components/Table';
 import ColumnComponent from '@/components/global/editor/components/ColumnComponent';
 import CustomImageComponent from '@/components/global/editor/components/CustomImageComponent';
 import BlockquoteComponent from '@/components/global/editor/components/BlockquoteComponent';
-import {NumberedList} from '@/components/global/editor/components/ListComponent';
+import { BulletList, NumberedList, TodoList } from '@/components/global/editor/components/ListComponent';
 
 
 interface MasterRecursiveProps {
@@ -67,12 +67,14 @@ const ContentRenderer: React.FC<MasterRecursiveProps> = React.memo(
                         <Heading2 {...commonProps} />
                     </motion.div>
                 );
+
             case "heading3":
                 return (
                     <motion.div className="w-full h-full" {...animationProps}>
                         <Heading3 {...commonProps} />
                     </motion.div>
                 );
+
             case "heading4":
                 return (
                     <motion.div className="w-full h-full" {...animationProps}>
@@ -86,12 +88,14 @@ const ContentRenderer: React.FC<MasterRecursiveProps> = React.memo(
                         <Title {...commonProps} />
                     </motion.div>
                 );
+
             case "paragraph":
                 return (
                     <motion.div className="w-full h-full" {...animationProps}>
                         <Paragraph {...commonProps} />
                     </motion.div>
                 );
+
             case "column":
                 if (Array.isArray(content.content)) {
                     return (
@@ -195,16 +199,16 @@ const ContentRenderer: React.FC<MasterRecursiveProps> = React.memo(
                         />
                     </motion.div>
                 )
-            case "blockquote" : 
+            case "blockquote":
                 return (
                     <motion.div {...animationProps} className="w-full h-full">
                         <BlockquoteComponent>
-                            <Paragraph {...commonProps}/>
+                            <Paragraph {...commonProps} />
                         </BlockquoteComponent>
                     </motion.div>
                 )
-            
-            case "numberedList" : 
+
+            case "numberedList":
                 return (
                     <motion.div>
                         <NumberedList
@@ -215,13 +219,27 @@ const ContentRenderer: React.FC<MasterRecursiveProps> = React.memo(
                     </motion.div>
                 )
 
-            case "bulletList" : 
+            case "bulletList":
                 return (
                     <motion.div
                         {...animationProps}
                         className='w-full h-full'
                     >
                         <BulletList
+                            items={content.content as string[]}
+                            onChange={(newContent) => onContentChange(content.id, newContent)}
+                            className={content.className}
+                        />
+                    </motion.div>
+                )
+
+            case "todoList":
+                return (
+                    <motion.div
+                        {...animationProps}
+                        className='w-full h-full'
+                    >
+                        <TodoList
                             items={content.content as string[]}
                             onChange={(newContent) => onContentChange(content.id, newContent)}
                             className={content.className}
