@@ -10,6 +10,7 @@ import Table from '@/components/global/editor/components/Table';
 import ColumnComponent from '@/components/global/editor/components/ColumnComponent';
 import CustomImageComponent from '@/components/global/editor/components/CustomImageComponent';
 import BlockquoteComponent from '@/components/global/editor/components/BlockquoteComponent';
+import {NumberedList} from '@/components/global/editor/components/ListComponent';
 
 
 interface MasterRecursiveProps {
@@ -200,6 +201,17 @@ const ContentRenderer: React.FC<MasterRecursiveProps> = React.memo(
                         <BlockquoteComponent>
                             <Paragraph {...commonProps}/>
                         </BlockquoteComponent>
+                    </motion.div>
+                )
+            
+            case "numberedList" : 
+                return (
+                    <motion.div>
+                        <NumberedList
+                            items={content.content as string[]}
+                            onChange={(newContent) => onContentChange(content.id, newContent)}
+                            className={content.className}
+                        />
                     </motion.div>
                 )
 
