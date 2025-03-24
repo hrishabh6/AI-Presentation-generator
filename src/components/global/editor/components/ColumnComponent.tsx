@@ -27,25 +27,25 @@ const ColumnComponent = ({
 
     const createDefaultColumns = (count: number) => {
         return Array(count)
-        .fill(null)
-        .map(() => ({
-          id: v4(),
-          type: "paragraph" as const,
-          name: "Paragraph",
-          content: "",
-          placeholder: "Start typing...",
-        }));
+            .fill(null)
+            .map(() => ({
+                id: v4(),
+                type: "paragraph" as const,
+                name: "Paragraph",
+                content: "",
+                placeholder: "Start typing...",
+            }));
     }
 
     useEffect(() => {
-        if(content.length === 0) {
+        if (content.length === 0) {
             setColumns(createDefaultColumns(2))
         } else {
             setColumns(content)
         }
     }, [content])
 
-    
+
 
     return (
         <div className='relative w-full h-full'>
@@ -61,7 +61,8 @@ const ColumnComponent = ({
                     <React.Fragment key={item.id}>
                         <ResizablePanel
                             minSize={20}
-                            maxSize={100 / columns.length}
+                            defaultSize={50} // Ensure each panel starts with a valid size
+                            maxSize={80} // Allow some flexibility
                         >
                             <div className={cn("h-full w-full", item.className)}>
                                 <MasterRecursiveComponent
