@@ -61,6 +61,7 @@ const CallOutBox = ({
         className
       )} 
     >
+        <Icon className="mr-3 h-5 w-5 mt-0.5"/>
         {children}
     </div>
   )

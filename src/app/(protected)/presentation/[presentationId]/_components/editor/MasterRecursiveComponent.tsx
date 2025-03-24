@@ -12,6 +12,7 @@ import CustomImageComponent from '@/components/global/editor/components/CustomIm
 import BlockquoteComponent from '@/components/global/editor/components/BlockquoteComponent';
 import { BulletList, NumberedList, TodoList } from '@/components/global/editor/components/ListComponent';
 import CallOutBox from '@/components/global/editor/components/CallOutBox';
+import CodeBlock from '@/components/global/editor/components/CodeBlock';
 
 
 interface MasterRecursiveProps {
@@ -260,6 +261,38 @@ const ContentRenderer: React.FC<MasterRecursiveProps> = React.memo(
                         >
                             <Paragraph {...commonProps} />
                         </CallOutBox>
+                    </motion.div>
+                )
+
+            case 'codeBlock':
+                return (
+                    <motion.div
+                        {...animationProps}
+                        className='w-full h-full'
+                    >
+                        <CodeBlock
+                          code={content.code as string}  
+                          language={content.langauge}
+                          onChange={() => {}}
+                          className={content.className}
+                        
+                        />
+                    </motion.div>
+                )
+
+            case  "tableOfContents" :
+                return (
+                    <motion.div
+                        {...animationProps}
+                        className='w-full h-full'
+                    >
+                        <TableOfContents
+                            items={content.content as string[][]}
+                            onItemClick={(id) => {
+                                console.log(`Navigate to section : ${id}`)
+                            }}
+                            className = {content.className}
+                        />
                     </motion.div>
                 )
 
