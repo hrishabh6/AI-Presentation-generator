@@ -9,6 +9,7 @@ import Paragraph from '@/components/global/editor/components/Paragraph';
 import Table from '@/components/global/editor/components/Table';
 import ColumnComponent from '@/components/global/editor/components/ColumnComponent';
 import CustomImageComponent from '@/components/global/editor/components/CustomImageComponent';
+import BlockquoteComponent from '@/components/global/editor/components/BlockquoteComponent';
 
 
 interface MasterRecursiveProps {
@@ -193,7 +194,14 @@ const ContentRenderer: React.FC<MasterRecursiveProps> = React.memo(
                         />
                     </motion.div>
                 )
-
+            case "blockquote" : 
+                return (
+                    <motion.div {...animationProps} className="w-full h-full">
+                        <BlockquoteComponent>
+                            <Paragraph {...commonProps}/>
+                        </BlockquoteComponent>
+                    </motion.div>
+                )
 
             default:
                 return null
