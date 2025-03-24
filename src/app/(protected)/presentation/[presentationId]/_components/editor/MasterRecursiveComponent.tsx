@@ -215,6 +215,20 @@ const ContentRenderer: React.FC<MasterRecursiveProps> = React.memo(
                     </motion.div>
                 )
 
+            case "bulletList" : 
+                return (
+                    <motion.div
+                        {...animationProps}
+                        className='w-full h-full'
+                    >
+                        <BulletList
+                            items={content.content as string[]}
+                            onChange={(newContent) => onContentChange(content.id, newContent)}
+                            className={content.className}
+                        />
+                    </motion.div>
+                )
+
             default:
                 return null
         }
