@@ -6,6 +6,8 @@ import { Heading1, Heading2, Heading3, Heading4, Title } from '@/components/glob
 import { cn } from '@/lib/utils';
 import DropZone from './DropZone';
 import Paragraph from '@/components/global/editor/components/Paragraph';
+import Table from '@/components/global/editor/components/Table';
+import ColumnComponent from '@/components/global/editor/components/ColumnComponent';
 
 
 interface MasterRecursiveProps {
@@ -25,7 +27,7 @@ const ContentRenderer: React.FC<MasterRecursiveProps> = React.memo(
         content,
         onContentChange,
         slideId,
-        index,
+        // index,
         isEditable,
         isPreview
     }) => {
@@ -36,7 +38,7 @@ const ContentRenderer: React.FC<MasterRecursiveProps> = React.memo(
 
 
         const commonProps = {
-            placeHolder: content.placeholder,
+            placeholder: content.placeholder,
             value: content.content as string,
             onChange: handleChange,
             isPreview: isPreview,
@@ -53,7 +55,8 @@ const ContentRenderer: React.FC<MasterRecursiveProps> = React.memo(
             case "heading1":
                 return (<motion.div className="w-full h-full" {...animationProps}>
                     <Heading1 {...commonProps} />
-                </motion.div>)
+                </motion.div>
+                )
 
             case "heading2":
                 return (
@@ -80,12 +83,12 @@ const ContentRenderer: React.FC<MasterRecursiveProps> = React.memo(
                         <Title {...commonProps} />
                     </motion.div>
                 );
-                case "paragraph":
-                    return (
-                      <motion.div className="w-full h-full" {...animationProps}>
+            case "paragraph":
+                return (
+                    <motion.div className="w-full h-full" {...animationProps}>
                         <Paragraph {...commonProps} />
-                      </motion.div>
-                    );
+                    </motion.div>
+                );
             case "column":
                 if (Array.isArray(content.content)) {
                     return (
@@ -99,7 +102,7 @@ const ContentRenderer: React.FC<MasterRecursiveProps> = React.memo(
                             {content.content.length > 0 ? (
                                 (content.content as ContentItem[]).map(
                                     (subItem: ContentItem, subIndex: number) => (
-                                        <React.Fragment key={subItem.id || `item-${subIndex}`}>
+                                        <React.Fragment key={`item-${subIndex}`}>
                                             {isPreview &&
                                                 !subItem.restrictToDrop &&
                                                 subIndex == 0 &&
@@ -136,6 +139,43 @@ const ContentRenderer: React.FC<MasterRecursiveProps> = React.memo(
                 }
                 return null;
 
+            case "table":
+                return (
+                    <motion.div className="w-full h-full" {...animationProps}>
+                        <Table
+                            content={content.content as string[][]}
+                            onChange={(newContent) =>
+                                onContentChange(
+                                    content.id,
+                                    newContent !== null ? newContent : ""
+                                )
+                            }
+                            initialColSize={content.initialColumns}
+                            initialRowSize={content.initialRows}
+                            isPreview={isPreview}
+                            isEditable={isEditable}
+                        />
+                    </motion.div>
+                );
+
+            case "resizable-column":
+                if (Array.isArray(content.content)) {
+                    return (
+                        <motion.div
+                            {...animationProps}
+                            className='w-full h-full'
+                        >
+                            <ColumnComponent
+                                content={content.content as ContentItem[]}
+                                className={content.className}
+                                onContentChange={onContentChange}
+                                slideId={slideId}
+                                isPreview={isPreview}
+                                isEditable={isEditable}
+                            />
+                        </motion.div>
+                    )
+                }
 
             default:
                 return null
