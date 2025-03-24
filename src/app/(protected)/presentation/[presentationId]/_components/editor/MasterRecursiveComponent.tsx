@@ -8,6 +8,7 @@ import DropZone from './DropZone';
 import Paragraph from '@/components/global/editor/components/Paragraph';
 import Table from '@/components/global/editor/components/Table';
 import ColumnComponent from '@/components/global/editor/components/ColumnComponent';
+import CustomImageComponent from '@/components/global/editor/components/CustomImageComponent';
 
 
 interface MasterRecursiveProps {
@@ -176,6 +177,23 @@ const ContentRenderer: React.FC<MasterRecursiveProps> = React.memo(
                         </motion.div>
                     )
                 }
+                return null;
+
+            case "image":
+                return (
+                    <motion.div {...animationProps} className="w-full h-full">
+                        <CustomImageComponent
+                            alt={content.alt || "image"}
+                            src={content.content as string}
+                            className={content.className}
+                            isPreview={isPreview}
+                            contentId={content.id}
+                            onContentChange={onContentChange}
+                            isEditable={isEditable}
+                        />
+                    </motion.div>
+                )
+
 
             default:
                 return null
