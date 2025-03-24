@@ -13,6 +13,7 @@ import BlockquoteComponent from '@/components/global/editor/components/Blockquot
 import { BulletList, NumberedList, TodoList } from '@/components/global/editor/components/ListComponent';
 import CallOutBox from '@/components/global/editor/components/CallOutBox';
 import CodeBlock from '@/components/global/editor/components/CodeBlock';
+import TableOfContents from '@/components/global/editor/components/TableOfContents';
 
 
 interface MasterRecursiveProps {
@@ -287,7 +288,7 @@ const ContentRenderer: React.FC<MasterRecursiveProps> = React.memo(
                         className='w-full h-full'
                     >
                         <TableOfContents
-                            items={content.content as string[][]}
+                            items={content.content as string[]}
                             onItemClick={(id) => {
                                 console.log(`Navigate to section : ${id}`)
                             }}
