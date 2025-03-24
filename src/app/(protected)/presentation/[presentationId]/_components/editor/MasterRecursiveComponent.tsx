@@ -11,6 +11,7 @@ import ColumnComponent from '@/components/global/editor/components/ColumnCompone
 import CustomImageComponent from '@/components/global/editor/components/CustomImageComponent';
 import BlockquoteComponent from '@/components/global/editor/components/BlockquoteComponent';
 import { BulletList, NumberedList, TodoList } from '@/components/global/editor/components/ListComponent';
+import CallOutBox from '@/components/global/editor/components/CallOutBox';
 
 
 interface MasterRecursiveProps {
@@ -244,6 +245,21 @@ const ContentRenderer: React.FC<MasterRecursiveProps> = React.memo(
                             onChange={(newContent) => onContentChange(content.id, newContent)}
                             className={content.className}
                         />
+                    </motion.div>
+                )
+
+            case 'calloutBox' : 
+                return (
+                    <motion.div
+                        {...animationProps}
+                        className='w-full h-full'
+                    >
+                        <CallOutBox
+                            type={content.callOutTypes || 'info' }
+                            className={content.className}
+                        >
+                            <Paragraph {...commonProps} />
+                        </CallOutBox>
                     </motion.div>
                 )
 
