@@ -14,6 +14,7 @@ import { BulletList, NumberedList, TodoList } from '@/components/global/editor/c
 import CallOutBox from '@/components/global/editor/components/CallOutBox';
 import CodeBlock from '@/components/global/editor/components/CodeBlock';
 import TableOfContents from '@/components/global/editor/components/TableOfContents';
+import Divider from '@/components/global/editor/components/Divider';
 
 
 interface MasterRecursiveProps {
@@ -295,6 +296,18 @@ const ContentRenderer: React.FC<MasterRecursiveProps> = React.memo(
                             className = {content.className}
                         />
                     </motion.div>
+                )
+
+            case 'divider' : 
+                    return (
+                        <motion.div
+                            {...animationProps}
+                            className='w-full h-full'
+                        >
+                            <Divider
+                                className={content.className}
+                            />
+                        </motion.div>
                 )
 
             default:
