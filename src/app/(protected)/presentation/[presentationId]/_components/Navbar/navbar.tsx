@@ -8,9 +8,10 @@ import { toast } from 'sonner'
 
 type Props = {
     presentationId: string
+    saving : boolean
 }
 
-const Navbar = ({ presentationId }: Props) => {
+const Navbar = ({ presentationId, saving }: Props) => {
 
     const { currentTheme } = useSlideStore()
     const [isPresentationMode, setIsPresentationMode] = React.useState(false)
@@ -43,6 +44,20 @@ const Navbar = ({ presentationId }: Props) => {
             >
                 Presentation Editor
             </Link>
+
+            <div>
+                {
+                    saving ? (
+                        <h1>
+                            Saving...
+                        </h1>
+                    ) : (
+                        <h1>
+                            Saved
+                        </h1>
+                    )
+                }
+            </div>
 
             <div className="flex items-center gap-4">
                 <Button

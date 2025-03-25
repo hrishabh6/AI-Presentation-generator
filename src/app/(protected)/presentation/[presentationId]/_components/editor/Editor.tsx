@@ -4,14 +4,14 @@ import { LayoutSlides, Slide } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { useSlideStore } from '@/store/useSlideStore';
 import { ScrollArea } from '@radix-ui/react-scroll-area';
-import { isDragging } from 'motion-dom';
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useDrag, useDrop } from 'react-dnd';
 import { v4 } from 'uuid';
 import { MasterRecursiveComponent } from './MasterRecursiveComponent';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Button } from '@/components/ui/button';
 import { EllipsisVertical, Trash2 } from 'lucide-react';
+import { updateSlides } from '@/actions/project';
 
 
 interface DropZoneProps {
@@ -26,6 +26,7 @@ interface DropZoneProps {
     dropIndex: number
   ) => void;
   isEditable: boolean;
+  
 }
 
 
@@ -33,6 +34,7 @@ export const DropZone: React.FC<DropZoneProps> = ({
   index,
   isEditable,
   onDrop,
+  
 }) => {
 
   const [{ canDrop, isOver }, dropRef] = useDrop({
@@ -102,6 +104,26 @@ const DraggableSlides: React.FC<DraggableSlidesProps> = ({
 
   })
 
+  const [, drop] = useDrop({
+    accept : ['SLIDE', 'LAYOUT'],
+    hover(item : {index : number; type : string}){
+      if(!ref.current || !isEditable){
+        return
+      }
+      const dragIndex = item.index
+      const hoverIndex = index
+      if(item.type === 'SLIDE') {
+        if(dragIndex === hoverIndex) {
+          return
+        }
+        moveSlide(dragIndex, hoverIndex)
+        item.index = hoverIndex
+      }
+    }
+  })
+
+  drag(drop(ref))
+
   const handleContentChange = (contentId: string, newContent: string | string[] | string[][]) => {
     console.log('Content Changed', slide, contentId, newContent)
     if (isEditable) {
@@ -157,9 +179,10 @@ const DraggableSlides: React.FC<DraggableSlidesProps> = ({
 
 type Props = {
   isEditable: boolean;
+  isSaving: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const Editor = ({ isEditable }: Props) => {
+export const Editor = ({ isEditable, isSaving }: Props) => {
   const {
     slides,
     getOrderSlides,
@@ -169,9 +192,12 @@ export const Editor = ({ isEditable }: Props) => {
     project,
     addSlideIndex,
   } = useSlideStore();
+
   const orderedSlide = getOrderSlides()
-  const [loading, isLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
   const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const autosaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
   const moveSlide = (dragIndex: number, HoverIndex: number) => {
     if (!isEditable) return;
     reorderSlides(dragIndex, HoverIndex);
@@ -207,6 +233,16 @@ export const Editor = ({ isEditable }: Props) => {
       moveSlide(item.index, dropIndex);
     }
   };
+  
+  const saveSlides = useCallback(() => {
+      if(isEditable && project) {
+        (async () => {
+          isSaving(true)
+          await updateSlides(project.id, JSON.parse(JSON.stringify(slides)))
+          isSaving(false)
+        })()
+      }
+  }, [isEditable, slides, project])
 
   useEffect(() => {
     if (slideRefs.current[currentSlide]) {
@@ -220,9 +256,31 @@ export const Editor = ({ isEditable }: Props) => {
 
   useEffect(() => {
     if(typeof window !== 'undefined') {
-      isLoading(false)
+      setLoading(false)
     }
   }, [])
+
+  useEffect(() => {
+     if(autosaveTimeoutRef.current) {
+      clearTimeout(autosaveTimeoutRef.current)   
+     }
+     
+     if(isEditable) {
+        autosaveTimeoutRef.current = setTimeout(() => {
+          saveSlides()
+        }, 2000)
+     }
+
+      return () => {
+        if(autosaveTimeoutRef.current) {
+          clearTimeout(autosaveTimeoutRef.current)
+        }
+      }
+
+  }, [slides, isEditable, project])
+
+
+
 
   return (
     <div className="flex-1 flex flex-col h-full max-w-3xl mx-auto px-4 mb-20">

@@ -20,7 +20,7 @@ const Page = () => {
     const {setSlides, setProject, currentTheme, setCurrentTheme} = useSlideStore()
     const {setTheme} = useTheme()
     const params = useParams()
-
+    const [saving, isSaving] = React.useState(false)
     useEffect(() => {
       (async () => {
         try {
@@ -62,7 +62,7 @@ const Page = () => {
   return (
     <DndProvider backend={HTML5Backend}>
       <div className='min-h-screen flex flex-col'>
-        <Navbar presentationId={params.presentationId as string}/> 
+        <Navbar presentationId={params.presentationId as string} saving={saving}/> 
         <div
           className="flex-1 flex overflow-hidden pt-16"
           style={{
@@ -73,7 +73,7 @@ const Page = () => {
         >
           <LayoutPreview/>
           <div className='flex-1 ml-64 pr-16'>
-            <Editor isEditable={true}/>
+            <Editor isEditable={true} isSaving={isSaving}/>
           </div>
         </div>
 
