@@ -2,12 +2,13 @@
 import { Button } from '@/components/ui/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { useSlideStore } from '@/store/useSlideStore'
-import { LayoutTemplateIcon, Type } from 'lucide-react'
+import { LayoutTemplateIcon, PanelLeft, Type } from 'lucide-react'
 import React from 'react'
 import { LayoutChooser } from './tabs/LayoutChooser'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { component } from '@/lib/constants'
 import ComponentCard from './tabs/components-tabs/ComponentPreview'
+import ThemeChooser from './tabs/ThemeChooser'
 
 
 
@@ -87,6 +88,32 @@ const EditorSideBar = () => {
                         </ScrollArea>
                     </PopoverContent>
                 </Popover>
+            
+                <Popover>
+                    <PopoverTrigger asChild>
+                        <Button
+                            variant={"ghost"}
+                            size={"icon"}
+                            className="h-10 w-10 rounded-full"
+                        >
+                            <PanelLeft className="h-5 w-5" />
+                            <span className="sr-only">Change Style</span>
+                        </Button>
+                    </PopoverTrigger>
+                    <PopoverContent
+                        side="left"
+                        align="center"
+                        className="w-80"
+                        style={{
+                            backgroundColor: currentTheme.backgroundColor,
+                            color: currentTheme.fontColor,
+                        }}
+                    >
+                        <ThemeChooser />
+                    </PopoverContent>
+                </Popover>
+                                
+
             </div>
         </div>
     )

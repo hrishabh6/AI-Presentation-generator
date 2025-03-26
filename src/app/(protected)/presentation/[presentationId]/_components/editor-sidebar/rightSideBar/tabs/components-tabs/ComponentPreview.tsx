@@ -37,6 +37,9 @@ const ComponentCard = ({item}: {item : ComponentItemProps}) => {
             <span className="text-2xl text-primary"> {item.icon}</span>
           </div>
         </div>
+        <span className='text-sx text-gray-500 font-medium'>
+            {item.name}
+        </span>
       </button>
     </div>
   )
