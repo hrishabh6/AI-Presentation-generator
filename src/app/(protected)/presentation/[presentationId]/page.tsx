@@ -12,6 +12,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 import Navbar from './_components/Navbar/navbar'
 import LayoutPreview from './_components/editor-sidebar/LeftSideBar/LayoutPreview'
 import {Editor} from './_components/editor/Editor'
+import EditorSideBar from './_components/editor-sidebar/rightSideBar'
 
 
 const Page = () => {
@@ -76,6 +77,7 @@ const Page = () => {
             <Editor isEditable={true} isSaving={isSaving}/>
           </div>
         </div>
+        <EditorSideBar/>
 
       </div>
     </DndProvider>

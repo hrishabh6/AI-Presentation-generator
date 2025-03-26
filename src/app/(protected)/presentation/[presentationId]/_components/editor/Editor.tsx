@@ -26,7 +26,7 @@ interface DropZoneProps {
     dropIndex: number
   ) => void;
   isEditable: boolean;
-  
+
 }
 
 
@@ -34,7 +34,7 @@ export const DropZone: React.FC<DropZoneProps> = ({
   index,
   isEditable,
   onDrop,
-  
+
 }) => {
 
   const [{ canDrop, isOver }, dropRef] = useDrop({
@@ -105,15 +105,15 @@ const DraggableSlides: React.FC<DraggableSlidesProps> = ({
   })
 
   const [, drop] = useDrop({
-    accept : ['SLIDE', 'LAYOUT'],
-    hover(item : {index : number; type : string}){
-      if(!ref.current || !isEditable){
+    accept: ['SLIDE', 'LAYOUT'],
+    hover(item: { index: number; type: string }) {
+      if (!ref.current || !isEditable) {
         return
       }
       const dragIndex = item.index
       const hoverIndex = index
-      if(item.type === 'SLIDE') {
-        if(dragIndex === hoverIndex) {
+      if (item.type === 'SLIDE') {
+        if (dragIndex === hoverIndex) {
           return
         }
         moveSlide(dragIndex, hoverIndex)
@@ -233,15 +233,15 @@ export const Editor = ({ isEditable, isSaving }: Props) => {
       moveSlide(item.index, dropIndex);
     }
   };
-  
+
   const saveSlides = useCallback(() => {
-      if(isEditable && project) {
-        (async () => {
-          isSaving(true)
-          await updateSlides(project.id, JSON.parse(JSON.stringify(slides)))
-          isSaving(false)
-        })()
-      }
+    if (isEditable && project) {
+      (async () => {
+        isSaving(true)
+        await updateSlides(project.id, JSON.parse(JSON.stringify(slides)))
+        isSaving(false)
+      })()
+    }
   }, [isEditable, slides, project])
 
   useEffect(() => {
@@ -255,27 +255,27 @@ export const Editor = ({ isEditable, isSaving }: Props) => {
   }, [currentSlide])
 
   useEffect(() => {
-    if(typeof window !== 'undefined') {
+    if (typeof window !== 'undefined') {
       setLoading(false)
     }
   }, [])
 
   useEffect(() => {
-     if(autosaveTimeoutRef.current) {
-      clearTimeout(autosaveTimeoutRef.current)   
-     }
-     
-     if(isEditable) {
-        autosaveTimeoutRef.current = setTimeout(() => {
-          saveSlides()
-        }, 2000)
-     }
+    if (autosaveTimeoutRef.current) {
+      clearTimeout(autosaveTimeoutRef.current)
+    }
 
-      return () => {
-        if(autosaveTimeoutRef.current) {
-          clearTimeout(autosaveTimeoutRef.current)
-        }
+    if (isEditable) {
+      autosaveTimeoutRef.current = setTimeout(() => {
+        saveSlides()
+      }, 2000)
+    }
+
+    return () => {
+      if (autosaveTimeoutRef.current) {
+        clearTimeout(autosaveTimeoutRef.current)
       }
+    }
 
   }, [slides, isEditable, project])
 
@@ -295,7 +295,7 @@ export const Editor = ({ isEditable, isSaving }: Props) => {
           <div className='px-4 pb-4 w-full flex flex-col gap-4 pt-2 ml-4'>
             {
               isEditable &&
-               <DropZone
+              <DropZone
                 index={0}
                 isEditable={isEditable}
                 onDrop={handleDrop}
@@ -303,7 +303,7 @@ export const Editor = ({ isEditable, isSaving }: Props) => {
             }
             {orderedSlide.map((slide, index) => (
               <React.Fragment
-                key={ index}
+                key={index}
               >
                 <DraggableSlides
                   slide={slide}
@@ -313,7 +313,14 @@ export const Editor = ({ isEditable, isSaving }: Props) => {
                   isEditable={isEditable}
 
                 />
-                
+                {
+                  isEditable &&
+                  <DropZone
+                    index={index + 1}
+                    isEditable={isEditable}
+                    onDrop={handleDrop}
+                  />
+                }
               </React.Fragment>
             ))}
           </div>
