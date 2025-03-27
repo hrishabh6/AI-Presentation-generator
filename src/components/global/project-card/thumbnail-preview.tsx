@@ -1,4 +1,5 @@
 'use client'
+import { MasterRecursiveComponent } from "@/app/(protected)/presentation/[presentationId]/_components/editor/MasterRecursiveComponent";
 // import { MasterRecursive } from "@/app/(protected)/(pages)/(presentationPages)/presentation/[presentationId]/_components/editor/MasterRecursive";
 import { Slide, Theme } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -23,21 +24,21 @@ const ThumbnailPreview = ({ slide, theme }: ThumbnailPreviewProps) => {
         backgroundImage: theme.gradientBackground,
       }}
     >
-      {slide ? 
+      {slide ?
         <div className="scale-[0.5] origin-top-left w-[200%] h-[200%] overflow-hidden">
-        {/* <MasterRecursive 
-        content={slide.content}
-        onContentChange={()=>{}}
-        slideId={slide.id}
-        isPreview={true}
-        isEditable={false}
-        index={slide.slideOrder}
-        key={slide.id} */}
-        {/* /> */}
-            This is the slide
-      </div> : 
-      <div className="w-full h-full bg-gray-400 flex justify-center items-center">
-        <Image className="w-6 h-6 text-gray-500"/>
+          {<MasterRecursiveComponent
+            content={slide.content}
+            onContentChange={() => { }}
+            slideId={slide.id}
+            isPreview={true}
+            isEditable={false}
+            index={slide.slideOrder}
+            key={slide.id}
+          />}
+          This is the slide
+        </div> :
+        <div className="w-full h-full bg-gray-400 flex justify-center items-center">
+          <Image className="w-6 h-6 text-gray-500" />
         </div>}
     </div>
   );

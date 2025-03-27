@@ -2,7 +2,7 @@
 //uncomment the necessary lines to get the thumbnail preview running
 import React from 'react'
 import { motion } from "framer-motion";
-import { itemVariants } from '@/lib/constants';
+import { itemVariants, themes } from '@/lib/constants';
 // import { themes } from '@/lib/constants';
 import { useSlideStore } from '@/store/useSlideStore';
 import { useRouter } from 'next/navigation';
@@ -14,6 +14,7 @@ import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { deleteProject, recoverProject } from '@/actions/project';
 import AlertDialogBox from '@/components/global/alert-dialog';
+import ThumbnailPreview from './thumbnail-preview';
 
 interface ProjectCardProps {
   projectId: string;
@@ -31,7 +32,7 @@ const ProjectCard = ({
   createdAt,
   isDelete,
   slideData,
-  // themeName,
+  themeName,
 }: ProjectCardProps) => {
   const [loading, setLoading] = React.useState(false)
   const [open, setOpen] = React.useState(false)
@@ -115,7 +116,7 @@ const ProjectCard = ({
   }
 
 
-  // const theme = themes.find((theme) => theme.name === themeName) || themes[0]
+  const theme = themes.find((theme) => theme.name === themeName) || themes[0]
   
   return (
     <motion.div
@@ -127,10 +128,9 @@ const ProjectCard = ({
         className="relative aspect-[16/10] overflow-hidden rounded-lg cursor-pointer"
         onClick={handleNavigation}
       >
-        {/* <ThumbnailPreview theme={theme}
-        //add the slide dat
-        //  slide={JSON.parse(JSON.stringify(slideData))?.[0]}
-        /> */}
+        <ThumbnailPreview theme={theme}
+         slide={JSON.parse(JSON.stringify(slideData))?.[0]}
+        />
       </div>
       <div className='w-full'>
         <div className='space-y-1'>
