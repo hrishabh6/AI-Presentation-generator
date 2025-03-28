@@ -232,3 +232,44 @@ export const updateTheme = async (projectId: string, theme: string) => {
     
   }
 }
+
+export const deleteAllProjects = async (projectIds: string[]) => {
+    try {
+      if(!Array.isArray(projectIds) || projectIds.length === 0) {
+        return { status: 400, error: "ProjectIds are required" };
+    }
+
+    const checkUser = await onAuthenticateUser();
+    if (checkUser.status !== 200 || !checkUser.user) {
+      return { status: 403, error: "User not authenticated" };
+    }
+
+    const userId = checkUser.user.id;
+    const projectToDelete = await client.project.findMany({
+        where: {
+            id : {
+                in : projectIds
+            },
+            userId,
+        }
+    })
+
+    if (projectToDelete.length === 0) {
+        return { status: 404, error: "No projects found" };
+    }
+
+    const deleteProjects = await client.project.deleteMany({
+        where: {
+            id : {
+                in : projectToDelete.map((project) => project.id)
+            }
+        }
+    })
+
+    return { status: 200, message : `${deleteProjects.count} projects successfully deleted` };
+    } catch (error) {
+        console.log("❌ Error in deleteAllProjects", error);
+        return { status: 500, error: "Internal Server Error"}
+    }
+
+} 
