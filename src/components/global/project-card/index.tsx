@@ -6,7 +6,6 @@ import { itemVariants, themes } from '@/lib/constants';
 // import { themes } from '@/lib/constants';
 import { useSlideStore } from '@/store/useSlideStore';
 import { useRouter } from 'next/navigation';
-// import ThumbnailPreview from './thumbnail-preview';
 import { JsonValue } from '@prisma/client/runtime/library';
 import { timeAgo } from '@/lib/utils';
 
