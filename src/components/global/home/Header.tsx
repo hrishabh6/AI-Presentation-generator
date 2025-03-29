@@ -12,7 +12,7 @@ const Header = ({ setMobileMenuOpen }: {
       <div className="flex items-center gap-2">
         <Presentation className="h-6 w-6 md:h-8 md:w-8 text-purple-500" />
         <span className="text-lg md:text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500">
-          SlideGenius
+          HorizonAI
         </span>
       </div>
       <div className="hidden md:flex items-center gap-8">

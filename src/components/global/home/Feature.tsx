@@ -6,7 +6,7 @@ const Feature = () => {
     <section id="features" className="container mx-auto px-4 py-16 md:py-20 lg:py-32">
         <div className="text-center mb-12 md:mb-20">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 md:mb-6 tracking-tight">
-            Why Choose SlideGenius
+            Why Choose HorizonAI
           </h2>
           <p className="text-lg sm:text-xl md:text-2xl text-gray-400 max-w-2xl mx-auto">
             The most advanced AI presentation builder on the market

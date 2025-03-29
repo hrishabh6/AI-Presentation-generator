@@ -30,7 +30,7 @@ export default function HomePage() {
             <div className="flex items-center gap-2">
               <Presentation className="h-6 w-6 text-purple-500" />
               <span className="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500">
-                SlideGenius
+                HorizonAI
               </span>
             </div>
             <button className="text-gray-300 hover:text-white" onClick={() => setMobileMenuOpen(false)}>

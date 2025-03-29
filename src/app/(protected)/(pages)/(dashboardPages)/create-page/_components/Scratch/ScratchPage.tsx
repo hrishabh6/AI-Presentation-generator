@@ -4,7 +4,7 @@ import { motion } from "framer-motion"
 import { containerVariants, itemVariants } from '@/lib/constants'
 import { Button } from '@/components/ui/button'
 import { ChevronLeft, Loader2, RotateCcwIcon } from 'lucide-react'
-import {v4 as uuidv4} from 'uuid'
+import { v4 as uuidv4 } from 'uuid'
 import useScratchStore from '@/store/useScratchStore'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
@@ -24,7 +24,7 @@ const ScratchPage = ({
 }: Props) => {
   const router = useRouter()
   const { outlines, resetOutlines, addMultipleOutlines, addOutline } = useScratchStore()
-  const {setProject} = useSlideStore()
+  const { setProject } = useSlideStore()
   const [editText, setEditText] = React.useState<string | null>("")
   const [editingCard, setEditingCard] = React.useState<string | null>(null);
   const [selectedCard, setSelectedCard] = React.useState<string | null>(null);
@@ -33,19 +33,19 @@ const ScratchPage = ({
   const handleGenerate = async () => {
     try {
       setIsGenerating(true)
-      if(outlines.length === 0) {
+      if (outlines.length === 0) {
         toast.error("Error", {
           description: "Please add atleast one card to generate the PPT"
         })
         return
       }
       const res = await createProject(outlines?.[0]?.title, outlines)
-      if(res.status !== 200) {
+      if (res.status !== 200) {
         toast.error("Error", {
           description: "Error in creating project"
         })
       }
-      if(res.data) {
+      if (res.data) {
         setProject(res.data)
         resetOutlines()
         toast.success("Success", {
@@ -78,15 +78,15 @@ const ScratchPage = ({
   }
 
   const handleAddCard = () => {
-    const newCard : OutlineCard = {
+    const newCard: OutlineCard = {
       id: uuidv4(),
       title: editText || "New Section",
       order: outlines.length + 1
     }
-    
+
     // Create a new array with all existing cards plus the new one
     const updatedCards = [...outlines, newCard];
-    
+
     // Use addMultipleOutlines to ensure consistent ordering
     addMultipleOutlines(updatedCards);
     setEditText("");
@@ -182,21 +182,29 @@ const ScratchPage = ({
       >
         Add Card
       </Button>
+
+      <div className="flex items-center gap-2 p-3 bg-yellow-100 text-yellow-700 rounded-md text-sm">
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M12 18h.01M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z" />
+        </svg>
+        <p className="text-sm">For the best experience, please use a desktop or laptop.</p>
+      </div>
+
       {outlines.length > 0 && (
-         <Button
-         className="w-full"
-         onClick={handleGenerate}
-         disabled={isGenerating}
-       >
-         {isGenerating ? (
-           <>
-             <Loader2 className="animate-spin mr-2" />
-             Generating...
-           </>
-         ) : (
-           "Generate"
-         )}
-       </Button>
+        <Button
+          className="w-full"
+          onClick={handleGenerate}
+          disabled={isGenerating}
+        >
+          {isGenerating ? (
+            <>
+              <Loader2 className="animate-spin mr-2" />
+              Generating...
+            </>
+          ) : (
+            "Generate"
+          )}
+        </Button>
       )}
     </motion.div>
   )

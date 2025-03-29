@@ -10,7 +10,7 @@ const Footer = () => {
               <div className="flex items-center gap-2 mb-4 md:mb-6">
                 <Presentation className="h-5 w-5 md:h-6 md:w-6 text-purple-500" />
                 <span className="text-base md:text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500">
-                  SlideGenius
+                  HorizonAI
                 </span>
               </div>
               <p className="text-sm md:text-base text-gray-400 mb-4 md:mb-6">
@@ -110,7 +110,7 @@ const Footer = () => {
           </div>
 
           <div className="mt-8 pt-8 border-t border-gray-800 text-center text-gray-500 text-xs md:text-sm">
-            <p>© {new Date().getFullYear()} SlideGenius. All rights reserved.</p>
+            <p>© {new Date().getFullYear()} HorizonAI. All rights reserved.</p>
           </div>
         </div>
       </footer>
