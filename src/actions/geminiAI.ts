@@ -5,6 +5,9 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { v4 } from "uuid";
 import { client } from "@/lib/prisma";
 import { currentUser } from "@clerk/nextjs/server";
+import { uploadDirect } from '@uploadcare/upload-client'
+
+const UPLOADCARE_PUBLIC_KEY = process.env.UPLOADCARE_PUBLIC_KEY || "";
 
 export const generateCreativePromptGemini = async (userPrompt: string) => {
   try {
@@ -91,8 +94,37 @@ const findImageComponents = (layout: ContentItem): ContentItem[] => {
   return images
 }
 
-const generateImageUrl = async (prompt: string): Promise<string> => {
+
+// Upload image to Uploadcare and return the public URL
+const uploadToUploadcare = async (base64Image: string): Promise<string> =>{
   try {
+    console.log("🔄 Starting image upload to Uploadcare...");
+    
+    // Convert base64 to a Buffer
+    const buffer = Buffer.from(base64Image, "base64");
+    console.log("✅ Converted base64 to Buffer");
+
+    // Upload using Uploadcare SDK
+    const result = await uploadDirect(buffer, {
+      publicKey: UPLOADCARE_PUBLIC_KEY,
+      store: "auto", // Auto-store the image permanently
+    });
+    console.log("✅ Upload successful, UUID:", result);
+
+    // Construct and return the CDN URL
+    const uploadcareUrl = `https://ucarecdn.com/${result}/`;
+    console.log("🌍 Image accessible at:", uploadcareUrl);
+    return uploadcareUrl;
+  } catch (error) {
+    console.error("❌ Error uploading to Uploadcare:", error);
+    return "https://placehold.co/600x400"; // Fallback image
+  }
+};
+
+const generateImageUrl = async (prompt : string) => {
+  try {
+    console.log("🔄 Generating image using Gemini AI...");
+    
     const improvedPrompt = `
     Create a highly realistic, professional image based on the following description. The image should look as if captured in real life, with attention to detail, lighting, and texture. 
 
@@ -108,52 +140,40 @@ const generateImageUrl = async (prompt: string): Promise<string> => {
     Example Use Cases: Business presentations, educational slides, professional designs.
     `;
 
+    console.log("📜 Enhanced prompt:", improvedPrompt);
+
     // Using Gemini 2.0 for image generation
+    
     const model = genAI.getGenerativeModel({
       model: "gemini-2.0-flash-exp-image-generation",
-      generationConfig: {
-        responseModalities: ['Text', 'Image']
-        // responseModalities: ['Image']
-      },
+      generationConfig: { responseModalities: ["Text", "Image"] },
     });
 
     const response = await model.generateContent(improvedPrompt);
+    console.log("✅ AI Response received:", response);
     
-    // Process the response to extract the image
-    let imageUrl = "https://placehold.co/600x400"; // Default fallback
-    
-    // Extract the image from response
+    // Extract base64 image from response
     for (const part of response.response.candidates?.[0]?.content?.parts || []) {
+      console.log("🔍 Checking response part:", part);
       if (part.inlineData) {
-        // Save the image to a file
-        const imageData = part.inlineData.data;
-        const imageName = `gemini-image-${v4()}.png`;
-        const imagePath = `./public/images/${imageName}`; // Adjust path as needed
+        const imageBase64 = part.inlineData.data;
+        console.log("✅ Extracted base64 image");
+
+        // Upload to Uploadcare and return its URL
+        const uploadcareUrl = await uploadToUploadcare(imageBase64);
+        console.log("✅ Image Uploaded to Uploadcare:", uploadcareUrl);
         
-        // Ensure directory exists
-        const dir = './public/images';
-        if (!fs.existsSync(dir)){
-          fs.mkdirSync(dir, { recursive: true });
-        }
-        
-        // Save image to file
-        const buffer = Buffer.from(imageData, 'base64');
-        fs.writeFileSync(imagePath, buffer);
-        
-        // Set the image URL
-        imageUrl = `/images/${imageName}`; // Relative URL for web access
-        console.log("Image Generated Successfully", imageUrl);
-        break; // Use the first image only
+        return uploadcareUrl; // Return the Uploadcare CDN URL
       }
     }
-    
-    return imageUrl;
-  } catch (error) {
-    console.log("❌ Error in generateImageUrl", error);
-    return "https://placehold.co/600x400";
-  }
-}
 
+    console.warn("⚠️ No valid image found in AI response, returning fallback image.");
+    return "https://placehold.co/600x400"; // Fallback
+  } catch (error) {
+    console.error("❌ Error in generateImageUrl:", error);
+    return "https://placehold.co/600x400"; // Fallback
+  }
+};
 // Alternative function using Imagen 3 for higher quality images
 const generateHighQualityImageUrl = async (prompt: string): Promise<string> => {
   try {
@@ -217,6 +237,7 @@ const replaceImagePlaceholders = async (layout: Slide) => {
     
     // For standard quality (works with experimental model):
     component.content = await generateImageUrl(component.alt || "Placeholder Image");
+    console.log("Image URL generated: ", component.content);
   }
 }
 
