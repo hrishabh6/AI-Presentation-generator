@@ -95,8 +95,7 @@ const findImageComponents = (layout: ContentItem): ContentItem[] => {
 }
 
 
-// Upload image to Uploadcare and return the public URL
-const uploadToUploadcare = async (base64Image: string): Promise<string> =>{
+const uploadToUploadcare = async (base64Image: string): Promise<string> => {
   try {
     console.log("🔄 Starting image upload to Uploadcare...");
     
@@ -109,17 +108,20 @@ const uploadToUploadcare = async (base64Image: string): Promise<string> =>{
       publicKey: UPLOADCARE_PUBLIC_KEY,
       store: "auto", // Auto-store the image permanently
     });
-    console.log("✅ Upload successful, UUID:", result);
 
-    // Construct and return the CDN URL
-    const uploadcareUrl = `https://ucarecdn.com/${result}/`;
+    console.log("✅ Upload successful, UUID:", result.uuid);
+
+    // Construct and return the correct CDN URL
+    const uploadcareUrl = `https://ucarecdn.com/${result.uuid}/`;
     console.log("🌍 Image accessible at:", uploadcareUrl);
+    
     return uploadcareUrl;
   } catch (error) {
     console.error("❌ Error uploading to Uploadcare:", error);
     return "https://placehold.co/600x400"; // Fallback image
   }
 };
+
 
 const generateImageUrl = async (prompt : string) => {
   try {
