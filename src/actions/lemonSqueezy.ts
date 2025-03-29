@@ -1,3 +1,4 @@
+"use server"
 import { lemonSqueezyClient } from "@/lib/axios";
 
 
