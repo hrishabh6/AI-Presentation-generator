@@ -56,8 +56,8 @@ const RecentPrompts = () => {
                         >
                             <div className='max-w-[70%]'>
                                 <h3 className='font-semibold text-xl line-clamp-1'>
-                                    {/* {prompt?.title} */}
-                                    This is the title
+                                    {prompt?.title}
+                                    
                                 </h3>
                                 <p className='font-semibold text-sm text-muted-foreground'>
                                     {/* {timeAgo(prompt?.createdAt)} */}

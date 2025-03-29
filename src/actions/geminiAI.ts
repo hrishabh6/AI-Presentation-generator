@@ -112,7 +112,7 @@ const uploadToUploadcare = async (base64Image: string): Promise<string> => {
     console.log("✅ Upload successful, UUID:", result.uuid);
 
     // Construct and return the correct CDN URL
-    const uploadcareUrl = `https://ucarecdn.com/${result.uuid}/`;
+    const uploadcareUrl = result.cdnUrl;
     console.log("🌍 Image accessible at:", uploadcareUrl);
     
     return uploadcareUrl;
