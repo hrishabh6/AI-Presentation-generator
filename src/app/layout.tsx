@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/provider/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { ClerkProvider } from "@clerk/nextjs";
 import {dark} from "@clerk/themes"
+import { Analytics } from '@vercel/analytics/next';
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -38,6 +39,7 @@ export default function RootLayout({
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
           suppressHydrationWarning
         >
+          <Analytics />
           <ThemeProvider
             attribute={'class'}
             defaultTheme="dark"
