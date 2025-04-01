@@ -33,6 +33,7 @@ export const onAuthenticateUser = async () => {
             email : user.emailAddresses[0].emailAddress,
             name: user.firstName + " " + user.lastName,
             profileImage : user.imageUrl,
+            subscription : true
 
         }
     })
