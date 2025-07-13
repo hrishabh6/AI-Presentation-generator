@@ -12,8 +12,8 @@ import CardList from '../Common/CardList'
 import usePromptStore from '@/store/usePromptStore'
 import RecentPrompts from './RecentPrompts'
 import { toast } from 'sonner'
-import {  generateCreativePromptOpenAi } from '@/actions/openAi'
-// import { generateCreativePromptGemini } from '@/actions/geminiAI'
+// import {  generateCreativePromptOpenAi } from '@/actions/openAi'
+import { generateCreativePromptGemini } from '@/actions/geminiAI'
 import { v4 as uuid } from 'uuid'
 import { OutlineCard } from '@/lib/types'
 import { createProject } from '@/actions/project'
@@ -53,7 +53,7 @@ const CreativeAI = ({ onBack }: Props) => {
         }
         setIsGenerating(true)
         // const res = await generateCreativePromptOpenAi(currentAiPrompt)
-        const res = await generateCreativePromptOpenAi(currentAiPrompt)
+        const res = await generateCreativePromptGemini(currentAiPrompt)
         if (res.status === 200 && res?.data?.outlines) {
             const cardsData: OutlineCard[] = [];
             res.data?.outlines.map((outlines: string, idx: number) => {
