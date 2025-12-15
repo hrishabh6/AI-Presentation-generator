@@ -46,7 +46,7 @@ const PresentationMode = ({
         }
         window.addEventListener('keydown', handleKeyDown)
         return () => window.removeEventListener("keydown", handleKeyDown)
-    }, [slides.length, onClose])
+    }, [slides.length, onClose, currentSlideIndex])
 
     return (
         <div className="fixed inset-0 bg-black flex items-center justify-center z-50">
